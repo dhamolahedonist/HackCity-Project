@@ -72,9 +72,35 @@ const deletePost = async (req, res) => {
   }
 };
 
+const updatePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findByIdAndUpdate(postId, req.body, { new: true });
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    const userIdFromToken = req.user.userId;
+
+    if (post.user.toString() !== userIdFromToken) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to update this post" });
+    }
+
+    const updatedPost = await post.save();
+
+    res.status(200).json({ message: "Post updated successfully", updatedPost });
+  } catch (error) {
+    res.status(500).json({ error: "Error updating post" });
+  }
+};
+
 module.exports = {
   createPost,
   getSinglePost,
   getAllPost,
   deletePost,
+  updatePost,
 };
