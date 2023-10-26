@@ -26,6 +26,34 @@ const userRegistration = async (req, res) => {
   }
 };
 
+// User login route
+const userLogin = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(401).json({ message: "User does not exist" });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Username or Password mismatch" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWTSECRETKEY, {
+      expiresIn: "1h",
+    });
+
+    res.json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Authentication failed" });
+  }
+};
+
 module.exports = {
   userRegistration,
+  userLogin,
 };
