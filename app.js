@@ -1,5 +1,6 @@
 const express = require("express");
 const userRoute = require("./routes/userRoutes");
+const postRoute = require("./routes/postRoutes");
 
 require("./config/db").connectToMongoDB();
 require("dotenv").config();
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/post", postRoute);
 
 app.listen(PORT, () => {
   console.log(`Server started on PORT: http://localhost:${PORT}`);
