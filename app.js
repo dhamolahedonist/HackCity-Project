@@ -1,5 +1,6 @@
 const express = require("express");
 
+require("./config/db").connectToMongoDB();
 require("dotenv").config();
 const PORT = process.env.PORT;
 
