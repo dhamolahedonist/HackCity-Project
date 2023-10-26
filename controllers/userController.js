@@ -19,7 +19,10 @@ const userRegistration = async (req, res) => {
     });
     await user.save();
 
-    res.json({ message: "Registration successful" });
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    res.status(200).json({ message: "Registration successful", userResponse });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Registration failed" });
@@ -46,14 +49,53 @@ const userLogin = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.json({ token });
+    res.status(200).json({ userId: user._id, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Authentication failed" });
   }
 };
 
+// Reset password route
+const resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Password reset failed" });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    ).select("-password");
+    res.status(200).json(updateUser);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   userRegistration,
   userLogin,
+  resetPassword,
+  updateUser,
 };
