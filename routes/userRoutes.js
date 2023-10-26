@@ -6,13 +6,14 @@ const {
   updateUser,
   getAllUsers,
 } = require("../controllers/userController");
+const validateRegister = require("../middleware/validation/validateRegister");
 
 const userRoute = express.Router();
 
-userRoute.post("/register", userRegistration);
+userRoute.post("/register", validateRegister, userRegistration);
 userRoute.post("/login", userLogin);
-userRoute.post("/reset-password", resetPassword);
-userRoute.put("/:id", updateUser);
+userRoute.post("/reset-password", validateRegister, resetPassword);
+userRoute.put("/:id", validateRegister, updateUser);
 userRoute.get("/", getAllUsers);
 
 module.exports = userRoute;
