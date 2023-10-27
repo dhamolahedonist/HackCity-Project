@@ -37,13 +37,12 @@ const getSinglePost = async (req, res) => {
   }
 };
 
-const getAllPost = async (req, res) => {
-  console.log(req);
+const getPosts = async (req, res) => {
   try {
     const posts = await Post.find();
     console.log(posts);
 
-    res.status(200).json({ posts });
+    res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ error: "Error fetching posts" });
   }
@@ -100,7 +99,7 @@ const updatePost = async (req, res) => {
 module.exports = {
   createPost,
   getSinglePost,
-  getAllPost,
+  getPosts,
   deletePost,
   updatePost,
 };

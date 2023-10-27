@@ -2,7 +2,7 @@ const express = require("express");
 const {
   createPost,
   getSinglePost,
-  getAllPost,
+  getPosts,
   deletePost,
   updatePost,
 } = require("../controllers/postController");
@@ -12,7 +12,7 @@ const postRoute = express.Router();
 
 postRoute.post("/create", verifyToken, createPost);
 postRoute.get("/:postId", getSinglePost);
-postRoute.get("/allposts", getAllPost);
+postRoute.get("/allposts", getPosts);
 postRoute.delete("/posts/:postId", verifyToken, deletePost);
 postRoute.put("/posts/:postId", verifyToken, updatePost);
 
