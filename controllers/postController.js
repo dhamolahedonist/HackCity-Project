@@ -39,14 +39,22 @@ const getSinglePost = async (req, res) => {
 
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
-    console.log(posts);
-
-    res.status(200).json(posts);
+    const posts = await Post.find().lean();
+    res.json(posts);
   } catch (error) {
     res.status(500).json({ error: "Error fetching posts" });
   }
 };
+
+// const getPosts = async (req, res) => {
+//   try {
+//     const post = await Post.find({}).sort({ $natural: -1 }).lean();
+
+//     return res.status(200).json({ success: true, message: "Success", post });
+//   } catch (e) {
+//     res.status(500).json({ success: false, error: "Internal server error" });
+//   }
+// };
 
 const deletePost = async (req, res) => {
   try {

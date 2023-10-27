@@ -12,7 +12,7 @@ const postRoute = express.Router();
 
 postRoute.post("/create", verifyToken, createPost);
 postRoute.get("/:postId", getSinglePost);
-postRoute.get("/allposts", getPosts);
+postRoute.get("/", getPosts);
 postRoute.delete("/posts/:postId", verifyToken, deletePost);
 postRoute.put("/posts/:postId", verifyToken, updatePost);
 
