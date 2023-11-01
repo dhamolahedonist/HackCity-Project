@@ -46,16 +46,6 @@ const getPosts = async (req, res) => {
   }
 };
 
-// const getPosts = async (req, res) => {
-//   try {
-//     const post = await Post.find({}).sort({ $natural: -1 }).lean();
-
-//     return res.status(200).json({ success: true, message: "Success", post });
-//   } catch (e) {
-//     res.status(500).json({ success: false, error: "Internal server error" });
-//   }
-// };
-
 const deletePost = async (req, res) => {
   try {
     const { postId } = req.params;
